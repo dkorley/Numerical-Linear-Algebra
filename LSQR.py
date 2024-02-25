@@ -13,7 +13,12 @@ def LSQR(A, b):
     m, n = A.shape
     Q, R, rank = QRd.QR(A)
     b = np.dot(Q.T, b)
-    x = bs.backwardSubstitution(R, b)
+    if rank == n:
+        x = bs.backwardSubstitution(R, b)
+    else:
+        Q1, R1, rank1 = QRd.QR(R.T)
+        z = fs.forwardSubstitution(R1.T, b)
+        x = Q1@z
     
     return x
 
